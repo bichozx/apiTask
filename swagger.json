@@ -1,0 +1,141 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "APITASK",
+    "description": "API para manejar tareas, permitiendo creación, consulta, actualización y eliminación."
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "paths": {
+    "/tasks": {
+      "get": {
+        "summary": "Obtener todas las tareas",
+        "description": "Devuelve una lista de tareas. Se puede filtrar por estado (completed o pending).",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filtrar por estado (completed o pending).",
+            "required": false,
+            "type": "string",
+            "enum": ["completed", "pending"]
+          }
+        ],
+        "responses": {
+          "200": { "description": "Lista de tareas obtenida exitosamente." },
+          "500": { "description": "Error interno del servidor." }
+        }
+      },
+      "post": {
+        "summary": "Crear una nueva tarea",
+        "description": "Crea una nueva tarea con un título y una descripción opcional.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Tarea creada exitosamente." },
+          "400": { "description": "Error de validación." },
+          "500": { "description": "Error interno del servidor." }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "summary": "Obtener una tarea por ID",
+        "description": "Devuelve los detalles de una tarea específica según su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la tarea."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalles de la tarea obtenidos exitosamente."
+          },
+          "404": { "description": "Tarea no encontrada." },
+          "500": { "description": "Error interno del servidor." }
+        }
+      },
+      "put": {
+        "summary": "Actualizar una tarea",
+        "description": "Actualiza los campos de una tarea existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la tarea."
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Tarea actualizada exitosamente." },
+          "400": { "description": "Error de validación." },
+          "404": { "description": "Tarea no encontrada." },
+          "500": { "description": "Error interno del servidor." }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar una tarea",
+        "description": "Elimina una tarea existente por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la tarea."
+          }
+        ],
+        "responses": {
+          "200": { "description": "Tarea eliminada exitosamente." },
+          "404": { "description": "Tarea no encontrada." },
+          "500": { "description": "Error interno del servidor." }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Task": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Título de la tarea (obligatorio).",
+          "example": "Comprar pan"
+        },
+        "description": {
+          "type": "string",
+          "description": "Descripción de la tarea (opcional).",
+          "example": "Comprar pan para el desayuno."
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Estado de la tarea (por defecto es false).",
+          "example": false
+        }
+      }
+    }
+  }
+}
